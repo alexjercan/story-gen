@@ -1,0 +1,20 @@
+[package]
+name = "story_gen"
+version = "0.1.0"
+authors = ["jercan_alex27@yahoo.com"]
+edition = "2021"
+license = "MIT"
+homepage = "https://github.com/alexjercan/story-gen"
+description = "Simple project that generates a story based on a given input using AI APIs"
+keywords = ["chatgpt", "elevenlabs", "api"]
+categories = ["games"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+story_gen_pipeline = { path = "crates/story_gen_pipeline" }
+
+[workspace]
+members = [
+    "crates/*",
+]
