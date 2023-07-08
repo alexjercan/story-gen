@@ -1,9 +1,29 @@
-use story_gen_parser::{Action, actions};
+mod chatgpt;
+mod fakeyou;
+mod parse;
 
-pub struct Something {
-    // ...
+pub mod error;
+pub use error::*;
+
+use story_gen_parser::Action;
+
+pub enum StoryAction {
+    Comment(String),
+    Say(String, String, Vec<u8>),
 }
 
-pub fn the_function(prompt: String) -> Option<Something> {
-    None
+pub fn pipeline(prompt: String) -> PipelineResult<Vec<StoryAction>> {
+    let story = chatgpt::generate_story(prompt)?;
+    let actions = parse::parse_story(&story)?;
+
+    actions.into_iter().map(|a| {
+        let sa = match a {
+            Action::Comment(text) => StoryAction::Comment(text),
+            Action::Say(name, text) => {
+                let audio = fakeyou::generate_audio(&name, &text)?;
+                StoryAction::Say(name, text, audio)
+            }
+        };
+        Ok(sa)
+    }).collect::<PipelineResult<Vec<_>>>()
 }
