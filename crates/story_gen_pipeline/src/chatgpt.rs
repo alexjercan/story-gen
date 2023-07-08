@@ -3,7 +3,7 @@ use openai_api_rust::*;
 
 use crate::{Error, PipelineResult};
 
-pub(crate) fn generate_story(prompt: String) -> PipelineResult<String> {
+pub(crate) fn generate_story(prompt: &str) -> PipelineResult<String> {
     let auth = Auth::from_env().map_err(|e| Error::StoryError(e))?;
     let openai = OpenAI::new(auth, "https://api.openai.com/v1/");
 
@@ -21,7 +21,7 @@ pub(crate) fn generate_story(prompt: String) -> PipelineResult<String> {
         user: None,
         messages: vec![Message {
             role: Role::User,
-            content: prompt,
+            content: prompt.to_string(),
         }],
     };
 

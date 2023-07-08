@@ -13,6 +13,10 @@ categories = ["games"]
 
 [dependencies]
 story_gen_pipeline = { path = "crates/story_gen_pipeline" }
+bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main", features = ["wav"] }
+bevy_egui = { git = "https://github.com/Vrixyz/bevy_egui.git", branch = "bevy-main" }
+bevy_mod_sysfail = "2.0.0"
+futures-lite = "1.13.0"
 
 [workspace]
 members = [

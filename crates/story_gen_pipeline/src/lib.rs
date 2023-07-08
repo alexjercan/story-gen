@@ -12,11 +12,13 @@ pub enum StoryAction {
     Say(String, String, Vec<u8>),
 }
 
-pub fn pipeline(prompt: String) -> PipelineResult<Vec<StoryAction>> {
-    let story = chatgpt::generate_story(prompt)?;
+pub fn pipeline(prompt: &str) -> PipelineResult<Vec<StoryAction>> {
+    let story = chatgpt::generate_story(&prompt)?;
     let actions = parse::parse_story(&story)?;
 
     actions.into_iter().map(|a| {
+        println!("{:?}", a);
+
         let sa = match a {
             Action::Comment(text) => StoryAction::Comment(text),
             Action::Say(name, text) => {
