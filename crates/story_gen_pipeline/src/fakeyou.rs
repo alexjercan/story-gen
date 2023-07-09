@@ -1,27 +1,32 @@
+use std::collections::HashMap;
+
 use fakeyou_api::tts::*;
 use fakeyou_api::util::tts::*;
 use fakeyou_api::*;
 
 use crate::{Error, PipelineResult};
 
-fn name_to_id(name: &str) -> PipelineResult<&str> {
-    match name {
-        "Rick" => Ok("TM:ebgxj0j4fvzp"),
-        "Morty" => Ok("TM:mcvca56k5d5e"),
-        name => Err(Error::AudioError(format!("Unknown name: {}", name))),
-    }
+#[derive(Debug, Default)]
+pub(crate) struct FakeYouTTS {
+    name_to_id: HashMap<String, String>,
 }
 
-pub(crate) fn generate_audio(name: &str, prompt: &str) -> PipelineResult<Vec<u8>> {
-    let auth = Auth::default();
-    let fakeyou = FakeYou::new(auth, FAKEYOU_API_URL);
+impl FakeYouTTS {
+    pub(crate) fn new(name_to_id: HashMap<String, String>) -> Self {
+        Self { name_to_id }
+    }
 
-    let name = name_to_id(name)?;
+    pub(crate) fn generate(&self, name: &str, prompt: &str) -> PipelineResult<Vec<u8>> {
+        let auth = Auth::default();
+        let fakeyou = FakeYou::new(auth, FAKEYOU_API_URL);
 
-    let inference_body = InferenceBody::new(name, prompt);
+        let name = self.name_to_id.get(name).ok_or(Error::AudioError(format!("Unknown name: {}", name)))?;
 
-    fakeyou
-        .create_tts_task(&inference_body)
-        .map(|t| t.bytes)
-        .map_err(|e| Error::AudioError(e.to_string()))
+        let inference_body = InferenceBody::new(name, prompt);
+
+        fakeyou
+            .create_tts_task(&inference_body)
+            .map(|t| t.bytes)
+            .map_err(|e| Error::AudioError(e.to_string()))
+    }
 }
