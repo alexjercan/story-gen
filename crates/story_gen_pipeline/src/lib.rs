@@ -1,12 +1,9 @@
-// TODO: Still need to separate the pipeline into a pipeline for each component because I have to
-// handle if something breaks better. Right now if something breaks the other components fail too.
-// But for example if the audio fails for on step then the other steps should still work.
 mod chatgpt;
 mod fakeyou;
 mod parse;
 
 pub mod error;
-use std::collections::{VecDeque, HashMap};
+use std::collections::{HashMap, VecDeque};
 
 pub use error::*;
 
@@ -15,7 +12,7 @@ use story_gen_parser::Action;
 #[derive(Debug, Clone)]
 pub enum StoryAction {
     Comment(String),
-    Say(String, String, Vec<u8>),
+    Say(String, String, Result<Vec<u8>, AudioError>),
 }
 
 #[derive(Debug, Default)]
@@ -47,10 +44,6 @@ impl Pipeline {
         self.prompts.push_back(prompt.to_string());
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.prompts.is_empty() && self.actions.is_empty()
-    }
-
     pub fn clear(&mut self) {
         self.prompts.clear();
         self.actions.clear();
@@ -66,10 +59,10 @@ impl Iterator for Pipeline {
         if let Some(action) = self.actions.pop_front() {
             Some(match action {
                 Action::Comment(text) => Ok(StoryAction::Comment(text)),
-                Action::Say(name, text) => match self.fakeyou.generate(&name, &text) {
-                    Ok(audio) => Ok(StoryAction::Say(name, text, audio)),
-                    Err(e) => Err(e),
-                },
+                Action::Say(name, text) => {
+                    let audio = self.fakeyou.generate(&name, &text);
+                    Ok(StoryAction::Say(name, text, audio))
+                }
             })
         } else if let Some(prompt) = self.prompts.pop_front() {
             match self.chatgpt.generate(&prompt) {

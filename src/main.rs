@@ -166,7 +166,7 @@ pub fn check_story_loader(
                 pipeline_next_state.set(PipelineState::Spawn);
             }
             Some(Err(err)) => {
-                println!("Error: {}", err.to_string());
+                println!("Failed to spawn action: {}", err.to_string());
                 pipeline_next_state.set(PipelineState::Spawn);
             }
             None => {
@@ -206,31 +206,49 @@ pub fn spawn_story_actions(
     match actions.0.pop_front() {
         Some(action) => {
             match action {
-                StoryAction::Comment(text) => commands.spawn((
-                    StoryActionValue,
-                    StoryActionTimer(Timer::from_seconds(5.0, TimerMode::Once)),
-                    StoryActionSubtitle(format!("{}", text)),
-                )),
-                StoryAction::Say(name, text, audio) => {
-                    let audio_source = AudioSource {
-                        bytes: audio.as_slice().into(),
-                    };
-                    let handle = assets.add(audio_source);
+                StoryAction::Comment(text) => {
+                    let duration = text.len() as f32 / 10.0;
 
-                    // TODO: How can I find the duration of the audio?
-                    let duration = audio.len() as f32 / 44100.0;
-
-                    // TODO: I guess I can also have one entity for each action type
                     commands.spawn((
                         StoryActionValue,
                         StoryActionTimer(Timer::from_seconds(duration, TimerMode::Once)),
-                        StoryActionSubtitle(format!("{}: {}", name, text)),
-                        StoryActionAudio,
-                        AudioBundle {
-                            source: handle,
-                            settings: PlaybackSettings::ONCE.paused(),
-                        },
+                        StoryActionSubtitle(format!("{}", text)),
                     ))
+                }
+                StoryAction::Say(name, text, audio) => {
+                    match audio {
+                        Ok(audio) => {
+                            let audio_source = AudioSource {
+                                bytes: audio.as_slice().into(),
+                            };
+                            let handle = assets.add(audio_source);
+
+                            // TODO: How can I find the duration of the audio?
+                            let duration = audio.len() as f32 / 44100.0;
+
+                            commands.spawn((
+                                StoryActionValue,
+                                StoryActionTimer(Timer::from_seconds(duration, TimerMode::Once)),
+                                StoryActionSubtitle(format!("{}: {}", name, text)),
+                                StoryActionAudio,
+                                AudioBundle {
+                                    source: handle,
+                                    settings: PlaybackSettings::ONCE.paused(),
+                                },
+                            ))
+                        }
+                        Err(e) => {
+                            println!("Failed to spawn audio: {}", e.to_string());
+
+                            let duration = text.len() as f32 / 10.0;
+
+                            commands.spawn((
+                                StoryActionValue,
+                                StoryActionTimer(Timer::from_seconds(duration, TimerMode::Once)),
+                                StoryActionSubtitle(format!("{}: {}", name, text)),
+                            ))
+                        }
+                    }
                 }
             };
 
