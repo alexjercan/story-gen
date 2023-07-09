@@ -208,7 +208,7 @@ pub fn spawn_story_actions(
             match action {
                 StoryAction::Comment(text) => commands.spawn((
                     StoryActionValue,
-                    StoryActionTimer(Timer::from_seconds(3.0, TimerMode::Once)),
+                    StoryActionTimer(Timer::from_seconds(5.0, TimerMode::Once)),
                     StoryActionSubtitle(format!("{}", text)),
                 )),
                 StoryAction::Say(name, text, audio) => {

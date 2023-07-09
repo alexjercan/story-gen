@@ -1,3 +1,6 @@
+// TODO: Still need to separate the pipeline into a pipeline for each component because I have to
+// handle if something breaks better. Right now if something breaks the other components fail too.
+// But for example if the audio fails for on step then the other steps should still work.
 mod chatgpt;
 mod fakeyou;
 mod parse;
