@@ -12,11 +12,12 @@ categories = ["games"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-story_gen_pipeline = { path = "crates/story_gen_pipeline" }
 bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main", features = ["wav"] }
 bevy_egui = { git = "https://github.com/Vrixyz/bevy_egui.git", branch = "bevy-main" }
-bevy_mod_sysfail = "2.0.0"
+bevy_mod_sysfail = "3.0.0"
+fakeyou-api = "0.1.2"
 futures-lite = "1.13.0"
+openai_api_rust = "0.1.8"
 
 [workspace]
 members = [
