@@ -1,11 +1,12 @@
 mod main_menu;
 mod options;
-mod systems;
-mod styles;
 mod resources;
+mod story;
+mod styles;
+mod systems;
 
-use systems::*;
 use resources::*;
+use systems::*;
 
 use bevy::prelude::*;
 
@@ -15,7 +16,11 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_state::<AppState>()
         .add_systems(Startup, spawn_camera)
-        .add_plugins((main_menu::MainMenuPlugin, options::OptionsMenuPlugin))
+        .add_plugins((
+            main_menu::MainMenuPlugin,
+            options::OptionsMenuPlugin,
+            story::StoryPlugin,
+        ))
         .run();
 }
 
