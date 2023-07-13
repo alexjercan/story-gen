@@ -7,8 +7,8 @@ mod styles;
 mod systems;
 
 use systems::*;
-
 use bevy::prelude::*;
+use clickable_button::ClickableButtonPlugin;
 
 fn main() {
     App::new()
@@ -16,6 +16,7 @@ fn main() {
         .add_state::<AppState>()
         .add_systems(Startup, setup)
         .add_plugins((
+            ClickableButtonPlugin,
             main_menu::MainMenuPlugin,
             options::OptionsMenuPlugin,
             story::StoryPlugin,

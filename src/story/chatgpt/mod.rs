@@ -16,7 +16,7 @@ impl Plugin for ChatGPTPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<StoryChatBody>()
             .init_resource::<StoryChatAuth>()
-            .add_systems(OnEnter(StoryState::Simulation), handle_input_text)
+            .add_systems(Update, handle_input_text.run_if(in_state(AppState::Story)))
             .add_systems(
                 Update,
                 poll_story_loader_task

@@ -1,8 +1,7 @@
 use bevy::prelude::*;
-
 use super::components::*;
-
 use crate::styles;
+use clickable_button::ClickableButton;
 
 pub fn build_main_menu(commands: &mut Commands) {
     commands
@@ -107,6 +106,11 @@ fn build_menu(builder: &mut ChildBuilder) {
                 },
                 background_color: BackgroundColor::from(styles::color::SECONDARY),
                 ..default()
+            },
+            ClickableButton {
+                pressed_color: styles::color::FOCUS,
+                hover_color: styles::color::HOVER,
+                normal_color: styles::color::SECONDARY,
             },
             BackButton {},
         ))

@@ -12,9 +12,10 @@ pub fn handle_input_text(
     mut chat_body: ResMut<StoryChatBody>,
     auth: Res<StoryChatAuth>,
 ) {
-    let message = ev_input_text
-        .iter()
-        .fold(String::default(), |acc, ev| acc + &ev.0);
+    let Some(message) = ev_input_text.iter().next().map(|ev| ev.0.clone()) else { return };
+    println!("message: {}", message);
+
+    /*
     chat_body.add_user_message(message);
 
     // TODO: how can overcome this inconvenience?
@@ -52,24 +53,25 @@ pub fn handle_input_text(
     });
 
     commands.spawn(StoryGPTLoader(task));
+    */
 }
 
 pub fn poll_story_loader_task(
     mut commands: Commands,
     mut tasks: Query<(Entity, &mut StoryGPTLoader)>,
 ) {
-    let (entity, mut task) = tasks.get_single_mut().unwrap();
+    tasks.iter_mut().for_each(|(entity, mut task)| {
+        if let Some(action) = future::block_on(future::poll_once(&mut task.0)) {
+            match action {
+                Ok(s) => {
+                    println!("Success: {}", s);
+                }
+                Err(s) => {
+                    println!("Error: {:?}", s);
+                }
+            }
 
-    if let Some(action) = future::block_on(future::poll_once(&mut task.0)) {
-        match action {
-            Ok(s) => {
-                println!("Success: {}", s);
-            }
-            Err(s) => {
-                println!("Error: {:?}", s);
-            }
+            commands.entity(entity).despawn();
         }
-
-        commands.entity(entity).despawn();
-    }
+    });
 }

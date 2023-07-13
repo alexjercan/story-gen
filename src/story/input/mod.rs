@@ -22,7 +22,6 @@ impl Plugin for StoryInputPlugin {
                 Update,
                 (
                     interact_with_input_text,
-                    interact_with_continue_button,
                     submit_input_text,
                 )
                     .run_if(in_state(AppState::Story).and_then(in_state(StoryState::Idle))),

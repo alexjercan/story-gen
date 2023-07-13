@@ -1336,6 +1336,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "clickable_button"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
 name = "clipboard-win"
 version = "4.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3913,6 +3920,7 @@ dependencies = [
  "bevy",
  "bevy-inspector-egui",
  "bevy_mod_sysfail",
+ "clickable_button",
  "egui-gizmo",
  "egui_dock",
  "fakeyou-api",

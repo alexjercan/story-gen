@@ -1,0 +1,11 @@
+[package]
+name = "clickable_button"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+homepage = "https://github.com/alexjercan/story-gen"
+description = "This crate add a button component that can changes color when hovered and clicked."
+keywords = ["story_gen"]
+
+[dependencies]
+bevy = { version = "0.11.0"}

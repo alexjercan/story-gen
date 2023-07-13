@@ -2,7 +2,6 @@ use super::components::*;
 use super::events::*;
 use super::layout::*;
 use crate::story::StoryState;
-use crate::styles;
 use bevy::prelude::*;
 
 pub fn spawn_input_menu(mut commands: Commands) {
@@ -24,27 +23,6 @@ pub fn show_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu
 pub fn hide_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu>>) {
     if let Ok(mut hud_menu_visibility) = hud_menu_query.get_single_mut() {
         *hud_menu_visibility = Visibility::Hidden;
-    }
-}
-
-pub fn interact_with_continue_button(
-    mut button_query: Query<
-        (&Interaction, &mut BackgroundColor),
-        (Changed<Interaction>, With<ContinueButton>),
-    >,
-) {
-    if let Ok((interaction, mut background_color)) = button_query.get_single_mut() {
-        match *interaction {
-            Interaction::Pressed => {
-                *background_color = styles::color::FOCUS.into();
-            }
-            Interaction::Hovered => {
-                *background_color = styles::color::HOVER.into();
-            }
-            Interaction::None => {
-                *background_color = styles::color::PRIMARY.into();
-            }
-        }
     }
 }
 
@@ -72,7 +50,7 @@ pub fn submit_input_text(
     mut story_state_next_state: ResMut<NextState<StoryState>>,
     mut ev_text: EventWriter<InputTextEvent>,
 ) {
-    if &Interaction::Pressed == button_query.single() || kbd.just_pressed(KeyCode::Return) {
+    if Some(&Interaction::Pressed) == button_query.get_single().ok() || kbd.just_pressed(KeyCode::Return) {
         let mut text = text_query.single_mut();
         ev_text.send(InputTextEvent(text.sections[0].value.clone()));
         text.sections[0].value.clear();
