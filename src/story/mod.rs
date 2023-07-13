@@ -1,13 +1,13 @@
+mod chatgpt;
 mod input;
 
 use bevy::prelude::*;
-
 pub struct StoryPlugin;
 
 impl Plugin for StoryPlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<StoryState>()
-            .add_plugins(input::StoryInputPlugin);
+            .add_plugins((input::StoryInputPlugin, chatgpt::ChatGPTPlugin));
     }
 }
 

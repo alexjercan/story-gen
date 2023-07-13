@@ -4,7 +4,6 @@ use bevy::prelude::*;
 use super::components::*;
 use super::layout::*;
 
-use crate::resources::StoryGenAuth;
 use crate::styles;
 use crate::AppState;
 
@@ -23,19 +22,13 @@ pub fn interact_with_play_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<PlayButton>),
     >,
-    auth: Res<StoryGenAuth>,
     mut app_state_next_state: ResMut<NextState<AppState>>,
 ) {
     if let Ok((interaction, mut background_color)) = button_query.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
                 *background_color = styles::color::FOCUS.into();
-                // TODO: Show a popup message and don't change state if there's no auth
-                // the user will be able to set it up in the options menu or environment variables
-                match auth.auth {
-                    Some(_) => app_state_next_state.set(AppState::Story),
-                    None => println!("No auth, please set OPENAI_API_KEY..."),
-                };
+                app_state_next_state.set(AppState::Story)
             }
             Interaction::Hovered => {
                 *background_color = styles::color::HOVER.into();

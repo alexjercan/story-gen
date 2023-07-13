@@ -1,8 +1,6 @@
-use bevy::prelude::*;
-
 use super::components::*;
-
 use crate::styles;
+use bevy::prelude::*;
 
 pub fn build_input_menu(commands: &mut Commands) {
     commands

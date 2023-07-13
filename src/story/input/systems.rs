@@ -1,10 +1,9 @@
-use bevy::prelude::*;
-
 use super::components::*;
+use super::events::*;
 use super::layout::*;
-
+use crate::story::StoryState;
 use crate::styles;
-use crate::AppState;
+use bevy::prelude::*;
 
 pub fn spawn_input_menu(mut commands: Commands) {
     build_input_menu(&mut commands);
@@ -70,12 +69,13 @@ pub fn submit_input_text(
     button_query: Query<&Interaction, With<ContinueButton>>,
     kbd: Res<Input<KeyCode>>,
     mut text_query: Query<&mut Text, With<InputText>>,
-    mut app_state_next_state: ResMut<NextState<AppState>>,
+    mut story_state_next_state: ResMut<NextState<StoryState>>,
+    mut ev_text: EventWriter<InputTextEvent>,
 ) {
     if &Interaction::Pressed == button_query.single() || kbd.just_pressed(KeyCode::Return) {
         let mut text = text_query.single_mut();
-        println!("Text input: {}", text.sections[0].value);
+        ev_text.send(InputTextEvent(text.sections[0].value.clone()));
         text.sections[0].value.clear();
-        app_state_next_state.set(AppState::MainMenu);
+        story_state_next_state.set(StoryState::Simulation);
     }
 }
