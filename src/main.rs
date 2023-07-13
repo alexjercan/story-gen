@@ -1,3 +1,5 @@
+mod components;
+mod debug;
 mod main_menu;
 mod options;
 mod resources;
@@ -15,12 +17,13 @@ fn main() {
         .init_resource::<StoryGenAuth>()
         .add_plugins(DefaultPlugins)
         .add_state::<AppState>()
-        .add_systems(Startup, spawn_camera)
+        .add_systems(Startup, setup)
         .add_plugins((
             main_menu::MainMenuPlugin,
             options::OptionsMenuPlugin,
             story::StoryPlugin,
         ))
+        // .add_plugins(debug::DebugPlugin)
         .run();
 }
 

@@ -1,8 +1,7 @@
-use bevy::prelude::Component;
+use bevy::prelude::*;
 
 #[derive(Component, Debug)]
-pub struct HudMenu {}
+pub struct InputMenu {}
 
 #[derive(Component, Debug)]
 pub struct ContinueButton {}
-

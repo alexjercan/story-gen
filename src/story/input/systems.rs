@@ -6,29 +6,30 @@ use super::layout::*;
 use crate::styles;
 use crate::AppState;
 
-pub fn spawn_hud_menu(mut commands: Commands) {
-    build_hud_menu(&mut commands);
+pub fn spawn_input_menu(mut commands: Commands) {
+    build_input_menu(&mut commands);
 }
 
-pub fn despawn_hud_menu(mut commands: Commands, hud_menu_query: Query<Entity, With<HudMenu>>) {
+pub fn despawn_input_menu(mut commands: Commands, hud_menu_query: Query<Entity, With<InputMenu>>) {
     if let Ok(hud_menu_entity) = hud_menu_query.get_single() {
         commands.entity(hud_menu_entity).despawn_recursive();
     }
 }
 
-pub fn show_hud_menu(mut hud_menu_query: Query<&mut Visibility, With<HudMenu>>) {
+pub fn show_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu>>) {
     if let Ok(mut hud_menu_visibility) = hud_menu_query.get_single_mut() {
         *hud_menu_visibility = Visibility::Visible;
     }
 }
 
-pub fn hide_hud_menu(mut hud_menu_query: Query<&mut Visibility, With<HudMenu>>) {
+pub fn hide_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu>>) {
     if let Ok(mut hud_menu_visibility) = hud_menu_query.get_single_mut() {
         *hud_menu_visibility = Visibility::Hidden;
     }
 }
 
-pub fn interact_with_continue_button(
+/*
+pub fn interact_with_input_menu(
     mut button_query: Query<
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<ContinueButton>),
@@ -50,3 +51,4 @@ pub fn interact_with_continue_button(
         }
     }
 }
+*/
