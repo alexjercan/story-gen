@@ -73,21 +73,24 @@ fn build_menu(builder: &mut ChildBuilder) {
                     ..default()
                 })
                 .with_children(|builder| {
-                    builder.spawn(TextBundle {
-                        text: Text {
-                            sections: vec![TextSection {
-                                value: "".to_string(),
-                                style: TextStyle {
-                                    font_size: 20.0,
-                                    color: styles::color::TEXT,
-                                    ..default()
-                                },
-                            }],
-                            alignment: TextAlignment::Left,
+                    builder.spawn((
+                        TextBundle {
+                            text: Text {
+                                sections: vec![TextSection {
+                                    value: "".to_string(),
+                                    style: TextStyle {
+                                        font_size: 20.0,
+                                        color: styles::color::TEXT,
+                                        ..default()
+                                    },
+                                }],
+                                alignment: TextAlignment::Left,
+                                ..default()
+                            },
                             ..default()
                         },
-                        ..default()
-                    });
+                        InputText {},
+                    ));
                 });
         });
 

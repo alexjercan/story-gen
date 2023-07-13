@@ -4,4 +4,7 @@ use bevy::prelude::*;
 pub struct InputMenu {}
 
 #[derive(Component, Debug)]
+pub struct InputText {}
+
+#[derive(Component, Debug)]
 pub struct ContinueButton {}

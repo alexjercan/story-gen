@@ -28,19 +28,16 @@ pub fn hide_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu
     }
 }
 
-/*
-pub fn interact_with_input_menu(
+pub fn interact_with_continue_button(
     mut button_query: Query<
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<ContinueButton>),
     >,
-    mut app_state_next_state: ResMut<NextState<AppState>>,
 ) {
     if let Ok((interaction, mut background_color)) = button_query.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
                 *background_color = styles::color::FOCUS.into();
-                app_state_next_state.set(AppState::MainMenu);
             }
             Interaction::Hovered => {
                 *background_color = styles::color::HOVER.into();
@@ -51,4 +48,34 @@ pub fn interact_with_input_menu(
         }
     }
 }
-*/
+
+pub fn interact_with_input_text(
+    mut evr_char: EventReader<ReceivedCharacter>,
+    kbd: Res<Input<KeyCode>>,
+    mut text_query: Query<&mut Text, With<InputText>>,
+) {
+    let mut text = text_query.single_mut();
+
+    if kbd.just_pressed(KeyCode::Back) {
+        text.sections[0].value.pop();
+    }
+    for ev in evr_char.iter() {
+        if !ev.char.is_control() {
+            text.sections[0].value.push(ev.char);
+        }
+    }
+}
+
+pub fn submit_input_text(
+    button_query: Query<&Interaction, With<ContinueButton>>,
+    kbd: Res<Input<KeyCode>>,
+    mut text_query: Query<&mut Text, With<InputText>>,
+    mut app_state_next_state: ResMut<NextState<AppState>>,
+) {
+    if &Interaction::Pressed == button_query.single() || kbd.just_pressed(KeyCode::Return) {
+        let mut text = text_query.single_mut();
+        println!("Text input: {}", text.sections[0].value);
+        text.sections[0].value.clear();
+        app_state_next_state.set(AppState::MainMenu);
+    }
+}

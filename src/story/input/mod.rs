@@ -1,5 +1,5 @@
-mod layout;
 mod components;
+mod layout;
 mod systems;
 
 use bevy::prelude::*;
@@ -18,7 +18,15 @@ impl Plugin for StoryInputPlugin {
             .add_systems(OnEnter(AppState::Story), spawn_input_menu)
             .add_systems(OnExit(AppState::Story), despawn_input_menu)
             .add_systems(OnEnter(StoryState::Idle), show_input_menu)
-            .add_systems(OnExit(StoryState::Idle), hide_input_menu);
-            // .add_systems(Update, interact_with_input_menu.run_if(in_state(StoryState::Idle)));
+            .add_systems(OnExit(StoryState::Idle), hide_input_menu)
+            .add_systems(
+                Update,
+                (
+                    interact_with_input_text,
+                    interact_with_continue_button,
+                    submit_input_text,
+                )
+                    .run_if(in_state(AppState::Story).and_then(in_state(StoryState::Idle))),
+            );
     }
 }
