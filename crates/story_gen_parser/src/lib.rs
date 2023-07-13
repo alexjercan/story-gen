@@ -6,7 +6,7 @@
 //! the game.
 
 pub mod parser;
-
+pub mod error;
 mod string;
 
 pub use parser::{actions, Action};

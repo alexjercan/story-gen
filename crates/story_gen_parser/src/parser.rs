@@ -1,12 +1,11 @@
 use super::string;
-
-use std::fmt::{self, Display, Formatter};
-
+use crate::error::Error;
 use nom::{
     branch::alt, bytes::complete::tag, character::complete::multispace0, combinator::eof,
     error::ParseError, multi::many0, sequence::delimited, AsChar, Compare, IResult, InputLength,
     InputTake, InputTakeAtPosition, Parser,
 };
+use std::fmt::{self, Display, Formatter};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Action {
@@ -77,8 +76,13 @@ fn action(input: &str) -> IResult<&str, Action> {
     alt((comment, say)).parse(input)
 }
 
-pub fn actions(input: &str) -> IResult<&str, Vec<Action>> {
+fn actions_(input: &str) -> IResult<&str, Vec<Action>> {
     delimited(multispace0, many0(action), eof).parse(input)
+}
+
+pub fn actions(input: &str) -> Result<Vec<Action>, Error> {
+    let (_, actions) = actions_(input).map_err(|err| Error::ParserError(err.to_string()))?;
+    Ok(actions)
 }
 
 #[cfg(test)]
@@ -111,13 +115,10 @@ mod tests {
                 "comment (\"hello world\")\n\
                  say (\"hello world\", \"hello world\")"
             ),
-            Ok((
-                "",
-                vec![
-                    Action::Comment("hello world".to_string()),
-                    Action::Say("hello world".to_string(), "hello world".to_string())
-                ]
-            ))
+            Ok(vec![
+               Action::Comment("hello world".to_string()),
+               Action::Say("hello world".to_string(), "hello world".to_string())
+            ])
         );
     }
 }

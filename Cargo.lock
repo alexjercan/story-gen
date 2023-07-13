@@ -3926,6 +3926,7 @@ dependencies = [
  "fakeyou-api",
  "futures-lite",
  "openai_api_rust",
+ "story_gen_parser",
 ]
 
 [[package]]
@@ -3933,15 +3934,6 @@ name = "story_gen_parser"
 version = "0.1.0"
 dependencies = [
  "nom",
-]
-
-[[package]]
-name = "story_gen_pipeline"
-version = "0.1.0"
-dependencies = [
- "fakeyou-api",
- "openai_api_rust",
- "story_gen_parser",
 ]
 
 [[package]]

@@ -44,6 +44,7 @@ pub fn poll_story_loader_task(
     if let Some(action) = future::block_on(future::poll_once(&mut task.0)) {
         match action {
             Ok(message) => {
+                println!("\n\nMessage: {:?}", message);
                 ev_input_story.send(InputStoryEvent(message.clone()));
                 chat_body.add_assistant_message(message)
             }
