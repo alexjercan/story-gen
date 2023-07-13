@@ -29,51 +29,66 @@ sure to include catch phrases like "Oh jeez, Rick" for Morty and
 sci-fi jokes."""#;
 
 #[derive(Resource, Debug, Deref, DerefMut)]
-pub struct StoryChatBody {
-    pub body: ChatBody,
-}
+pub struct StoryChatBody(pub ChatBody);
 
 impl Default for StoryChatBody {
     fn default() -> Self {
-        Self {
-            body: ChatBody {
-                model: "gpt-3.5-turbo".to_string(),
-                max_tokens: None,
-                temperature: None,
-                top_p: None,
-                n: None,
-                stream: None,
-                stop: None,
-                presence_penalty: None,
-                frequency_penalty: None,
-                logit_bias: None,
-                user: None,
-                messages: vec![Message {
-                    role: Role::System,
-                    content: SYSTEM.to_string(),
-                }],
-            },
-        }
+        Self(ChatBody {
+            model: "gpt-3.5-turbo".to_string(),
+            max_tokens: None,
+            temperature: None,
+            top_p: None,
+            n: None,
+            stream: None,
+            stop: None,
+            presence_penalty: None,
+            frequency_penalty: None,
+            logit_bias: None,
+            user: None,
+            messages: vec![Message {
+                role: Role::System,
+                content: SYSTEM.to_string(),
+            }],
+        })
+    }
+}
+
+impl Clone for StoryChatBody {
+    fn clone(&self) -> Self {
+        Self(ChatBody {
+            model: self.model.clone(),
+            max_tokens: self.max_tokens,
+            temperature: self.temperature,
+            top_p: self.top_p,
+            n: self.n,
+            stream: self.stream,
+            stop: self.stop.clone(),
+            presence_penalty: self.presence_penalty,
+            frequency_penalty: self.frequency_penalty,
+            logit_bias: self.logit_bias.clone(),
+            user: self.user.clone(),
+            messages: self.messages.clone(),
+        })
     }
 }
 
 impl StoryChatBody {
     pub fn add_user_message(&mut self, message: String) {
-        self.body.messages.push(Message {
+        self.messages.push(Message {
             role: Role::User,
             content: message,
         });
     }
 
     pub fn add_assistant_message(&mut self, message: String) {
-        self.body.messages.push(Message {
+        self.messages.push(Message {
             role: Role::Assistant,
             content: message,
         });
     }
 }
 
-#[derive(Resource, Debug, Deref, DerefMut)]
+#[derive(Resource, Debug, Deref, DerefMut, Clone)]
 pub struct StoryChatAuth(pub Auth);
 
 impl Default for StoryChatAuth {
