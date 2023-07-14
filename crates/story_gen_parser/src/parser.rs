@@ -116,8 +116,8 @@ mod tests {
                  say (\"hello world\", \"hello world\")"
             ),
             Ok(vec![
-               Action::Comment("hello world".to_string()),
-               Action::Say("hello world".to_string(), "hello world".to_string())
+                Action::Comment("hello world".to_string()),
+                Action::Say("hello world".to_string(), "hello world".to_string())
             ])
         );
     }

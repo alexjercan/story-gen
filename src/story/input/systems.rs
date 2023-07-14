@@ -50,7 +50,9 @@ pub fn submit_input_text(
     mut story_state_next_state: ResMut<NextState<StoryState>>,
     mut ev_text: EventWriter<InputTextEvent>,
 ) {
-    if Some(&Interaction::Pressed) == button_query.get_single().ok() || kbd.just_pressed(KeyCode::Return) {
+    if Some(&Interaction::Pressed) == button_query.get_single().ok()
+        || kbd.just_pressed(KeyCode::Return)
+    {
         let mut text = text_query.single_mut();
         ev_text.send(InputTextEvent(text.sections[0].value.clone()));
         text.sections[0].value.clear();

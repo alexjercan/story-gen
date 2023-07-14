@@ -1,6 +1,6 @@
 mod chatgpt;
-mod fakeyou;
 mod input;
+mod interpreter;
 mod parser;
 
 use bevy::prelude::*;
@@ -12,7 +12,7 @@ impl Plugin for StoryPlugin {
             input::StoryInputPlugin,
             chatgpt::ChatGPTPlugin,
             parser::ParserPlugin,
-            fakeyou::FakeYouPlugin,
+            interpreter::InterpreterPlugin,
         ));
     }
 }

@@ -1,6 +1,6 @@
-use bevy::prelude::*;
 use super::components::*;
 use crate::styles;
+use bevy::prelude::*;
 use clickable_button::ClickableButton;
 
 pub fn build_main_menu(commands: &mut Commands) {
@@ -58,16 +58,14 @@ pub fn build_main_menu(commands: &mut Commands) {
 fn build_title(builder: &mut ChildBuilder) {
     builder.spawn(TextBundle {
         text: Text {
-            sections: vec![
-                TextSection {
-                    value: "Options".to_string(),
-                    style: TextStyle {
-                        font_size: 80.0,
-                        color: styles::color::TEXT,
-                        ..default()
-                    },
+            sections: vec![TextSection {
+                value: "Options".to_string(),
+                style: TextStyle {
+                    font_size: 80.0,
+                    color: styles::color::TEXT,
+                    ..default()
                 },
-            ],
+            }],
             alignment: TextAlignment::Center,
             ..default()
         },
@@ -78,16 +76,14 @@ fn build_title(builder: &mut ChildBuilder) {
 fn build_menu(builder: &mut ChildBuilder) {
     builder.spawn(TextBundle {
         text: Text {
-            sections: vec![
-                TextSection {
-                    value: "The options menu is under construction!".to_string(),
-                    style: TextStyle {
-                        font_size: 40.0,
-                        color: styles::color::TEXT,
-                        ..default()
-                    },
+            sections: vec![TextSection {
+                value: "The options menu is under construction!".to_string(),
+                style: TextStyle {
+                    font_size: 40.0,
+                    color: styles::color::TEXT,
+                    ..default()
                 },
-            ],
+            }],
             alignment: TextAlignment::Center,
             ..default()
         },

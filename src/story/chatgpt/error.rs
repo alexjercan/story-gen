@@ -10,4 +10,3 @@ impl From<openai_api_rust::Error> for Error {
         Error::StoryError(err.to_string())
     }
 }
-

@@ -6,9 +6,9 @@ mod story;
 mod styles;
 mod systems;
 
-use systems::*;
 use bevy::prelude::*;
 use clickable_button::ClickableButtonPlugin;
+use systems::*;
 
 fn main() {
     App::new()

@@ -74,4 +74,3 @@ pub mod color {
         alpha: 1.0,
     };
 }
-

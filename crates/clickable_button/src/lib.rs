@@ -2,8 +2,8 @@ mod components;
 mod systems;
 
 use bevy::prelude::*;
-use systems::*;
 pub use components::ClickableButton;
+use systems::*;
 
 pub struct ClickableButtonPlugin;
 

@@ -20,10 +20,7 @@ impl Plugin for StoryInputPlugin {
             .add_systems(OnExit(StoryState::Idle), hide_input_menu)
             .add_systems(
                 Update,
-                (
-                    interact_with_input_text,
-                    submit_input_text,
-                )
+                (interact_with_input_text, submit_input_text)
                     .run_if(in_state(AppState::Story).and_then(in_state(StoryState::Idle))),
             );
     }
