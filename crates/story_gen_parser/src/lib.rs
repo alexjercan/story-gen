@@ -9,4 +9,5 @@ pub mod error;
 pub mod parser;
 mod string;
 
+pub use error::Error;
 pub use parser::{actions, Action};

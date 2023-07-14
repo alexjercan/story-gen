@@ -1,0 +1,14 @@
+[package]
+name = "fakeyou"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+homepage = "https://github.com/alexjercan/story-gen"
+description = "This crate is a plugin that generates tts for parsed actions."
+keywords = ["story_gen"]
+
+[dependencies]
+bevy = { version = "0.11.0"}
+story_gen_parser = { path = "../story_gen_parser" }
+fakeyou-api = "0.1.2"
+futures-lite = "1.13.0"

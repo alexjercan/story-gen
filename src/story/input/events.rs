@@ -1,4 +1,4 @@
 use bevy::prelude::*;
 
 #[derive(Event, Debug)]
-pub struct InputTextEvent(pub String);
+pub struct CreatedTextEvent(pub String);

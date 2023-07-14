@@ -1,0 +1,13 @@
+[package]
+name = "parser"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+homepage = "https://github.com/alexjercan/story-gen"
+description = "This crate is a plugin that allows to parse text into story actions."
+keywords = ["story_gen"]
+
+[dependencies]
+bevy = { version = "0.11.0"}
+story_gen_parser = { path = "../story_gen_parser" }
+futures-lite = "1.13.0"

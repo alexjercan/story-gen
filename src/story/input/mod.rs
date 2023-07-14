@@ -6,14 +6,14 @@ mod systems;
 use super::StoryState;
 use crate::AppState;
 use bevy::prelude::*;
-pub use events::InputTextEvent;
+pub use events::CreatedTextEvent;
 use systems::*;
 
 pub struct StoryInputPlugin;
 
 impl Plugin for StoryInputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<InputTextEvent>()
+        app.add_event::<CreatedTextEvent>()
             .add_systems(OnEnter(AppState::Story), spawn_input_menu)
             .add_systems(OnExit(AppState::Story), despawn_input_menu)
             .add_systems(OnEnter(StoryState::Idle), show_input_menu)

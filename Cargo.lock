@@ -351,6 +351,7 @@ version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04a90fe8e9c03fa2d30acf39a5178a48526df00c1ccea2fc43fa6d9ca4d8a168"
 dependencies = [
+ "bevy_dylib",
  "bevy_internal",
 ]
 
@@ -548,6 +549,15 @@ dependencies = [
  "bevy_time",
  "bevy_utils",
  "sysinfo",
+]
+
+[[package]]
+name = "bevy_dylib"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ad484eae97d347df68c557653242371cb655281f98b2fdf8f56fe0ab73b3f9f"
+dependencies = [
+ "bevy_internal",
 ]
 
 [[package]]
@@ -1304,6 +1314,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fd16c4719339c4530435d38e511904438d07cce7950afa3718a84ac36c10e89e"
 
 [[package]]
+name = "chatgpt"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "futures-lite",
+ "openai_api_rust",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1791,6 +1810,16 @@ name = "event-listener"
 version = "2.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
+
+[[package]]
+name = "fakeyou"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "fakeyou-api",
+ "futures-lite",
+ "story_gen_parser",
+]
 
 [[package]]
 name = "fakeyou-api"
@@ -3226,6 +3255,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "parser"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "futures-lite",
+ "story_gen_parser",
+]
+
+[[package]]
 name = "paste"
 version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3917,15 +3955,19 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 name = "story_gen"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "bevy",
  "bevy-inspector-egui",
  "bevy_mod_sysfail",
+ "chatgpt",
  "clickable_button",
  "egui-gizmo",
  "egui_dock",
+ "fakeyou",
  "fakeyou-api",
  "futures-lite",
  "openai_api_rust",
+ "parser",
  "story_gen_parser",
 ]
 
