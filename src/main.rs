@@ -1,6 +1,8 @@
+mod resources;
 mod components;
 mod debug;
 mod input;
+mod loader;
 mod main_menu;
 mod options;
 mod pipeline;
@@ -13,7 +15,10 @@ use systems::*;
 
 fn main() {
     App::new()
+        .init_resource::<resources::Stories>()
         .add_plugins(DefaultPlugins)
+        .add_asset::<loader::StoryAsset>()
+        .add_asset_loader(loader::StoryAssetLoader)
         .add_state::<AppState>()
         .add_systems(Startup, setup)
         .add_plugins((
@@ -24,6 +29,7 @@ fn main() {
             pipeline::PipelinePlugin,
         ))
         // .add_plugins(debug::DebugPlugin)
+        .add_systems(OnEnter(AppState::Story), handle_started)
         .add_systems(
             Update,
             handle_created_text.run_if(in_state(AppState::Story)),

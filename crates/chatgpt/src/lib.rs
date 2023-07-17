@@ -40,6 +40,10 @@ impl Display for Error {
 // This component is used to run the ChatGPT call on another thread
 #[derive(Component)]
 struct ChatGPTTask(Task<ChatGPTResult<String>>);
+//
+// The plugin will listen for this event to reset the ChatGPT state
+#[derive(Event, Debug)]
+pub struct InputSystemEvent(pub String);
 
 // The plugin will listen for this event to trigger the ChatGPT call
 #[derive(Event, Debug)]
@@ -92,7 +96,33 @@ impl Clone for StoryChatBody {
     }
 }
 
+impl Default for StoryChatBody {
+    fn default() -> Self {
+        Self(ChatBody {
+            model: "gpt-3.5-turbo".to_string(),
+            max_tokens: None,
+            temperature: None,
+            top_p: None,
+            n: None,
+            stream: None,
+            stop: None,
+            presence_penalty: None,
+            frequency_penalty: None,
+            logit_bias: None,
+            user: None,
+            messages: Vec::default(),
+        })
+    }
+}
+
 impl StoryChatBody {
+    fn set_system_message(&mut self, message: String) {
+        self.messages = vec![Message {
+            role: Role::System,
+            content: message,
+        }];
+    }
+
     fn add_user_message(&mut self, message: String) {
         self.messages.push(Message {
             role: Role::User,
@@ -121,53 +151,30 @@ impl Default for StoryChatAuth {
     }
 }
 
-pub struct ChatGPTPlugin {
-    body: ChatBody,
-}
-
-impl Default for ChatGPTPlugin {
-    fn default() -> Self {
-        Self {
-            body: ChatBody {
-                model: "gpt-3.5-turbo".to_string(),
-                max_tokens: None,
-                temperature: None,
-                top_p: None,
-                n: None,
-                stream: None,
-                stop: None,
-                presence_penalty: None,
-                frequency_penalty: None,
-                logit_bias: None,
-                user: None,
-                messages: Vec::default(),
-            },
-        }
-    }
-}
-
-impl ChatGPTPlugin {
-    pub fn new(body: ChatBody) -> Self {
-        Self { body }
-    }
-
-    pub fn with_system_prompt(mut self, system_prompt: &str) -> Self {
-        self.body.messages.push(Message {
-            role: Role::System,
-            content: system_prompt.to_string(),
-        });
-        self
-    }
-}
+pub struct ChatGPTPlugin;
 
 impl Plugin for ChatGPTPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<InputChatEvent>()
+        app.add_event::<InputSystemEvent>()
+            .add_event::<InputChatEvent>()
             .add_event::<CreatedStoryEvent>()
             .init_resource::<StoryChatAuth>()
-            .insert_resource(StoryChatBody::from(&self.body))
-            .add_systems(Update, (handle_input_chat, poll_chatgpt_task));
+            .init_resource::<StoryChatBody>()
+            .add_systems(
+                Update,
+                (handle_input_system, handle_input_chat, poll_chatgpt_task),
+            );
     }
+}
+
+fn handle_input_system(
+    mut ev_input_system: EventReader<InputSystemEvent>,
+    mut chat_body: ResMut<StoryChatBody>,
+) {
+    ev_input_system.iter().for_each(|ev| {
+        let message = ev.0.clone();
+        chat_body.set_system_message(message);
+    });
 }
 
 fn handle_input_chat(

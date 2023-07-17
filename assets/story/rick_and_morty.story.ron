@@ -1,0 +1,8 @@
+(
+    name: "Rick and Morty",
+    system: "You are given the formal language for describing a story. The description of\neach instruction is as follows:\n\n- `comment(\"description\")` Insert a comment in the story.\n- `say(\"character\", \"dialogue\")` Make a character speak.\n\nDo NOT use any other instruction than the ones listed above.\n\nSee the following script as an example of how your script MUST to be formatted:\n\n```\ncomment(\"The story takes place inside Rick's garage. Rick is trying to fix the portal gun.\")\n\nsay(\"Rick\", \"I need to fix this portal gun.\")\nsay(\"Morty\", \"Oh jeez, Rick! There is an alien in the living room.\")\nsay(\"Rick\", \"Frick, Morty! I have to fix the portal gun so I can get rid of the alien.\")\n```\n\nYou are in charge of creating a Rick and Morty story. Available\ncharacters: Rick, Morty. Do NOT use extra characters. The\ncharacters will use some light profanity like frick and crap. Make\nsure to include catch phrases like \"Oh jeez, Rick\" for Morty and\n\"Wubba Lubba dub-dub\" for Rick. Make sure to include nerdy and\nsci-fi jokes.",
+    names: {
+        "Rick": "TM:ebgxj0j4fvzp",
+        "Morty": "TM:mcvca56k5d5e",
+    }
+)

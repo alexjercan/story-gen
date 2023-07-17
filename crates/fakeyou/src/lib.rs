@@ -37,6 +37,10 @@ impl Display for Error {
 #[derive(Component)]
 struct FakeYouTask(Task<FakeYouResult<Vec<u8>>>);
 
+// The plugin will listen for this event to trigger set the tts options
+#[derive(Event, Debug)]
+pub struct InputOptionsEvent(pub TTSOptions);
+
 #[derive(Debug, Clone)]
 pub struct SayAction {
     pub name: String,
@@ -51,47 +55,43 @@ pub struct InputSayEvent(pub SayAction);
 #[derive(Event, Debug)]
 pub struct CreatedTTSEvent(pub FakeYouResult<Handle<AudioSource>>);
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct TTSOptions {
     pub names: HashMap<String, String>,
 }
 
 // This resource is used to store the FakeYou request state
-#[derive(Resource, Debug, Deref, DerefMut)]
+#[derive(Resource, Debug, Default, Deref, DerefMut)]
 struct FakeYouTTSOptions(TTSOptions);
 
-pub struct FakeYouPlugin {
-    options: TTSOptions,
-}
-
-impl Default for FakeYouPlugin {
-    fn default() -> Self {
-        Self {
-            options: TTSOptions {
-                names: HashMap::default(),
-            },
-        }
+impl FakeYouTTSOptions {
+    fn set_options(&mut self, options: TTSOptions) {
+        self.0 = options;
     }
 }
 
-impl FakeYouPlugin {
-    pub fn new(options: TTSOptions) -> Self {
-        Self { options }
-    }
-
-    pub fn with_names(mut self, names: HashMap<String, String>) -> Self {
-        self.options.names = names;
-        self
-    }
-}
+pub struct FakeYouPlugin;
 
 impl Plugin for FakeYouPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<InputSayEvent>()
+        app.add_event::<InputOptionsEvent>()
+            .add_event::<InputSayEvent>()
             .add_event::<CreatedTTSEvent>()
-            .insert_resource(FakeYouTTSOptions(self.options.clone()))
-            .add_systems(Update, (handle_input_action, poll_fakeyou_task));
+            .init_resource::<FakeYouTTSOptions>()
+            .add_systems(
+                Update,
+                (handle_input_options, handle_input_action, poll_fakeyou_task),
+            );
     }
+}
+
+fn handle_input_options(
+    mut ev_input_options: EventReader<InputOptionsEvent>,
+    mut options: ResMut<FakeYouTTSOptions>,
+) {
+    ev_input_options.iter().for_each(|ev| {
+        options.set_options(ev.0.clone());
+    });
 }
 
 fn handle_input_action(

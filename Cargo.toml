@@ -26,6 +26,8 @@ bevy_mod_sysfail = "3.0.0"
 egui-gizmo = "0.11.0"
 egui_dock = "0.6.3"
 anyhow = "1.0.71"
+serde = { version = "1.0.171", features = ["derive"] }
+ron = "0.8.0"
 
 [workspace]
 members = [

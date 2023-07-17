@@ -47,6 +47,7 @@ fn poll_parser_task(
 ) {
     let Some((entity, mut task)) = tasks.iter_mut().next() else { return };
 
+    // TODO: Maybe here use send_batch and introduce an IllegalAction
     if let Some(actions) = future::block_on(future::poll_once(&mut task.0)) {
         ev_created_actions.send(CreatedActionsEvent(actions));
 
