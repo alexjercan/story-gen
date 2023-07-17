@@ -1,27 +1,27 @@
 mod components;
 mod events;
 mod layout;
+mod resources;
 mod systems;
 
-use super::StoryState;
 use crate::AppState;
 use bevy::prelude::*;
 pub use events::CreatedTextEvent;
+use resources::*;
 use systems::*;
 
 pub struct StoryInputPlugin;
 
 impl Plugin for StoryInputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<CreatedTextEvent>()
+        app.init_resource::<InputVisible>()
+            .add_event::<CreatedTextEvent>()
             .add_systems(OnEnter(AppState::Story), spawn_input_menu)
             .add_systems(OnExit(AppState::Story), despawn_input_menu)
-            .add_systems(OnEnter(StoryState::Idle), show_input_menu)
-            .add_systems(OnExit(StoryState::Idle), hide_input_menu)
             .add_systems(
                 Update,
-                (interact_with_input_text, submit_input_text)
-                    .run_if(in_state(AppState::Story).and_then(in_state(StoryState::Idle))),
+                (interact_with_input_text, submit_input_text, show_input_menu)
+                    .run_if(in_state(AppState::Story)),
             );
     }
 }

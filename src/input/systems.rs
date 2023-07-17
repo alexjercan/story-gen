@@ -1,7 +1,7 @@
 use super::components::*;
 use super::events::*;
 use super::layout::*;
-use crate::story::StoryState;
+use super::resources::*;
 use bevy::prelude::*;
 
 pub fn spawn_input_menu(mut commands: Commands) {
@@ -14,15 +14,12 @@ pub fn despawn_input_menu(mut commands: Commands, hud_menu_query: Query<Entity, 
     }
 }
 
-pub fn show_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu>>) {
+pub fn show_input_menu(
+    mut hud_menu_query: Query<&mut Visibility, With<InputMenu>>,
+    visible: Res<InputVisible>,
+) {
     if let Ok(mut hud_menu_visibility) = hud_menu_query.get_single_mut() {
-        *hud_menu_visibility = Visibility::Visible;
-    }
-}
-
-pub fn hide_input_menu(mut hud_menu_query: Query<&mut Visibility, With<InputMenu>>) {
-    if let Ok(mut hud_menu_visibility) = hud_menu_query.get_single_mut() {
-        *hud_menu_visibility = Visibility::Hidden;
+        *hud_menu_visibility = visible.visible;
     }
 }
 
@@ -47,7 +44,7 @@ pub fn submit_input_text(
     button_query: Query<&Interaction, With<ContinueButton>>,
     kbd: Res<Input<KeyCode>>,
     mut text_query: Query<&mut Text, With<InputText>>,
-    mut story_state_next_state: ResMut<NextState<StoryState>>,
+    mut visible: ResMut<InputVisible>,
     mut ev_text: EventWriter<CreatedTextEvent>,
 ) {
     if Some(&Interaction::Pressed) == button_query.get_single().ok()
@@ -56,6 +53,6 @@ pub fn submit_input_text(
         let mut text = text_query.single_mut();
         ev_text.send(CreatedTextEvent(text.sections[0].value.clone()));
         text.sections[0].value.clear();
-        story_state_next_state.set(StoryState::Simulation);
+        visible.visible = Visibility::Hidden;
     }
 }

@@ -12,7 +12,6 @@ pub type FakeYouResult<T> = Result<T, Error>;
 
 #[derive(Debug, Clone)]
 pub enum Error {
-    ApiError(String),
     RequestError(String),
     TtsError(String),
 }
@@ -20,9 +19,6 @@ pub enum Error {
 impl From<fakeyou_api::Error> for Error {
     fn from(err: fakeyou_api::Error) -> Self {
         match err {
-            fakeyou_api::Error::ApiError(status, err) => {
-                Error::ApiError(format!("{} - {}", status, err.to_string()))
-            }
             fakeyou_api::Error::RequestError(err) => Error::RequestError(err),
         }
     }
@@ -31,7 +27,6 @@ impl From<fakeyou_api::Error> for Error {
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            Error::ApiError(err) => write!(f, "API error: {}", err),
             Error::RequestError(err) => write!(f, "Request error: {}", err),
             Error::TtsError(err) => write!(f, "TTS error: {}", err),
         }

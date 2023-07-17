@@ -1,8 +1,9 @@
 mod components;
 mod debug;
+mod input;
 mod main_menu;
 mod options;
-mod story;
+mod pipeline;
 mod styles;
 mod systems;
 
@@ -19,9 +20,14 @@ fn main() {
             ClickableButtonPlugin,
             main_menu::MainMenuPlugin,
             options::OptionsMenuPlugin,
-            story::StoryPlugin,
+            input::StoryInputPlugin,
+            pipeline::PipelinePlugin,
         ))
         // .add_plugins(debug::DebugPlugin)
+        .add_systems(
+            Update,
+            handle_created_text.run_if(in_state(AppState::Story)),
+        )
         .run();
 }
 
