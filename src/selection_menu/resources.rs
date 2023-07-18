@@ -1,4 +1,4 @@
-use crate::loader::StoryAsset;
+use crate::assets::loader::StoryAsset;
 use bevy::prelude::*;
 
 #[derive(Resource, Default)]

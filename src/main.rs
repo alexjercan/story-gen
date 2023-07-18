@@ -1,12 +1,11 @@
-mod selection_menu;
+mod assets;
 mod components;
 mod debug;
 mod input;
-mod loader;
 mod main_menu;
 mod options;
 mod pipeline;
-mod resources;
+mod selection_menu;
 mod styles;
 mod systems;
 
@@ -16,13 +15,11 @@ use systems::*;
 
 fn main() {
     App::new()
-        .init_resource::<resources::Stories>()
         .add_plugins(DefaultPlugins)
-        .add_asset::<loader::StoryAsset>()
-        .add_asset_loader(loader::StoryAssetLoader)
         .add_state::<AppState>()
         .add_systems(Startup, setup)
         .add_plugins((
+            assets::AssetsLoaderPlugin,
             ClickableButtonPlugin,
             main_menu::MainMenuPlugin,
             options::OptionsMenuPlugin,
@@ -42,6 +39,7 @@ fn main() {
 #[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
 pub enum AppState {
     #[default]
+    AssetLoading,
     MainMenu,
     OptionsMenu,
     SelectionMenu,

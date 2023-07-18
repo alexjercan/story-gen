@@ -1,5 +1,5 @@
 use bevy::prelude::Component;
-use crate::loader::StoryAsset;
+use crate::assets::loader::StoryAsset;
 
 #[derive(Component, Debug)]
 pub struct SelectionMenu {}

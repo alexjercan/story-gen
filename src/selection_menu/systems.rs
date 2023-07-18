@@ -1,21 +1,19 @@
 use super::components::*;
 use super::layout::*;
 use super::resources::*;
-use crate::loader::StoryAsset;
-use crate::resources::Stories;
+use crate::assets::{loader::StoryAsset, StoryAssets};
 use crate::AppState;
 use bevy::prelude::*;
 
 pub fn spawn_selection_menu(
     mut commands: Commands,
-    stories: Res<Stories>,
+    assets: Res<StoryAssets>,
     story_assets: Res<Assets<StoryAsset>>,
 ) {
-    // TODO: handle the error
-    let stories = stories
+    let stories = assets
         .stories
         .iter()
-        .map(|h| story_assets.get(h).unwrap())
+        .map(|h| story_assets.get(h).expect("bevy asset loader failed"))
         .collect::<Vec<_>>();
 
     build_selection_menu(&mut commands, stories);

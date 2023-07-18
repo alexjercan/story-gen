@@ -1,5 +1,5 @@
 use super::components::*;
-use crate::{loader::StoryAsset, styles};
+use crate::{assets::loader::StoryAsset, styles};
 use bevy::prelude::*;
 use clickable_button::ClickableButton;
 

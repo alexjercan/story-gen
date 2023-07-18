@@ -1,7 +1,5 @@
 use crate::input::CreatedTextEvent;
-use crate::loader::StoryAsset;
 use crate::pipeline::InputPromptEvent;
-use crate::resources::Stories;
 use crate::{components::MainCamera, selection_menu::SelectedStory};
 use bevy::{prelude::*, window::PrimaryWindow};
 use chatgpt::InputSystemEvent;
@@ -10,8 +8,6 @@ use fakeyou::{InputOptionsEvent, TTSOptions};
 pub fn setup(
     mut commands: Commands,
     window_query: Query<&Window, With<PrimaryWindow>>,
-    asset_server: Res<AssetServer>,
-    mut stories: ResMut<Stories>,
 ) {
     let window = window_query.get_single().unwrap();
 
@@ -22,13 +18,6 @@ pub fn setup(
         },
         MainCamera,
     ));
-
-    if let Ok(handles) = asset_server.load_folder("story") {
-        stories.stories = handles
-            .into_iter()
-            .map(|h| h.typed::<StoryAsset>())
-            .collect();
-    }
 }
 
 pub fn handle_created_text(

@@ -19,6 +19,7 @@ opt-level = 3
 fakeyou = { path = "crates/fakeyou" }
 chatgpt = { path = "crates/chatgpt" }
 clickable_button = { path = "crates/clickable_button" }
+bevy_asset_loader = { git = "https://github.com/NiklasEi/bevy_asset_loader.git", branch = "main" }
 bevy = { version = "0.11.0", features = ["wav", "dynamic_linking"] }
 bevy-inspector-egui = "0.19.0"
 bevy_mod_sysfail = "3.0.0"
