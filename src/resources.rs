@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::loader::StoryAsset;
+use bevy::prelude::*;
 
 #[derive(Resource, Default)]
 pub struct Stories {

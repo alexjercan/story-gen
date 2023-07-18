@@ -6,7 +6,6 @@ use bevy::prelude::*;
 use bevy_mod_sysfail::*;
 use chatgpt::*;
 use fakeyou::*;
-use parser::*;
 
 pub fn handle_created_text(
     mut ev_input_prompt: EventReader<InputPromptEvent>,
@@ -20,44 +19,34 @@ pub fn handle_created_text(
 #[sysfail(log)]
 pub fn handle_created_story(
     mut ev_created_story: EventReader<CreatedStoryEvent>,
-    mut ev_input_text: EventWriter<InputTextEvent>,
-) -> Result<()> {
-    ev_created_story
-        .iter()
-        .map(|ev| {
-            let story = ev.0.clone().map_err(|e| anyhow::anyhow!(e))?;
-
-            Ok(ev_input_text.send(InputTextEvent(story)))
-        })
-        .fold(Ok(()), |acc, res| acc.and(res))
-}
-
-#[sysfail(log)]
-pub fn handle_created_actions(
-    mut ev_created_actions: EventReader<CreatedActionsEvent>,
     mut ev_input_say: EventWriter<InputSayEvent>,
     mut actions_queue: ResMut<ActionsQueue>,
 ) -> Result<()> {
-    ev_created_actions
+    ev_created_story
         .iter()
-        .map(|ev| {
-            let actions = ev.0.clone().map_err(|e| anyhow::anyhow!(e))?;
+        .fold(Ok(vec![]), |acc: Result<_>, ev| {
+            let story = ev.0.as_ref().map_err(|err| anyhow::anyhow!("{}", err))?;
 
-            Ok(actions.iter().for_each(|action| {
-                actions_queue.actions.push_back(action.clone());
+            let actions = serde_json::from_str::<Vec<Action>>(story)?;
 
-                match action {
-                    Action::Say(name, text) => {
-                        ev_input_say.send(InputSayEvent(SayAction {
-                            name: name.clone(),
-                            text: text.clone(),
-                        }));
-                    }
-                    Action::Comment(_) => {}
-                };
-            }))
-        })
-        .fold(Ok(()), |acc, res| acc.and(res))
+            Ok(acc?.into_iter().chain(actions.into_iter()).collect())
+        })?
+        .iter()
+        .for_each(|action| {
+            actions_queue.actions.push_back(action.clone());
+
+            match action {
+                Action::Say { name, text } => {
+                    ev_input_say.send(InputSayEvent {
+                        name: name.clone(),
+                        text: text.clone(),
+                    });
+                }
+                Action::Comment { .. } => {}
+            };
+        });
+
+    Ok(())
 }
 
 pub fn handle_created_tts(
@@ -65,8 +54,8 @@ pub fn handle_created_tts(
     mut say_queue: ResMut<SayQueue>,
 ) {
     ev_created_tts.iter().for_each(|ev| {
-        let tts = match ev.0.clone() {
-            Ok(tts) => Some(tts),
+        let tts = match &ev.0 {
+            Ok(tts) => Some(tts.clone()),
             Err(err) => {
                 println!("TTS error: {}", err);
                 None
@@ -84,7 +73,7 @@ pub fn handle_action_story(
 ) {
     if let Some(action) = actions_queue.actions.front() {
         match action {
-            Action::Say(name, text) => {
+            Action::Say { name, text } => {
                 let has_say = say_queue.say.front().is_some();
 
                 if has_say {
@@ -92,20 +81,21 @@ pub fn handle_action_story(
 
                     println!("{}({:?}): {}", name, say.is_some(), text);
 
-                    ev_created_action_story.send(CreatedActionStoryEvent(ActionStory::Say(
-                        name.clone(),
-                        text.clone(),
-                        say,
-                    )));
+                    ev_created_action_story.send(CreatedActionStoryEvent(ActionStory::Say {
+                        name: name.clone(),
+                        text: text.clone(),
+                        tts: say,
+                    }));
 
                     actions_queue.actions.pop_front();
                 }
             }
-            Action::Comment(text) => {
+            Action::Comment { text } => {
                 println!("// {}", text);
 
-                ev_created_action_story
-                    .send(CreatedActionStoryEvent(ActionStory::Comment(text.clone())));
+                ev_created_action_story.send(CreatedActionStoryEvent(ActionStory::Comment {
+                    text: text.clone(),
+                }));
 
                 actions_queue.actions.pop_front();
             }

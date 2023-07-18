@@ -1,6 +1,14 @@
-use std::collections::VecDeque;
 use bevy::prelude::*;
-use parser::Action;
+use serde::{Deserialize, Serialize};
+use std::collections::VecDeque;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum Action {
+    #[serde(rename = "say")]
+    Say { name: String, text: String },
+    #[serde(rename = "comment")]
+    Comment { text: String },
+}
 
 #[derive(Resource, Default)]
 pub struct ActionsQueue {

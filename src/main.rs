@@ -1,4 +1,3 @@
-mod resources;
 mod components;
 mod debug;
 mod input;
@@ -6,6 +5,7 @@ mod loader;
 mod main_menu;
 mod options;
 mod pipeline;
+mod resources;
 mod styles;
 mod systems;
 

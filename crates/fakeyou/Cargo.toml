@@ -8,7 +8,7 @@ description = "This crate is a plugin that generates tts for parsed actions."
 keywords = ["story_gen"]
 
 [dependencies]
+anyhow = "1.0.72"
 bevy = { version = "0.11.0"}
-story_gen_parser = { path = "../story_gen_parser" }
-fakeyou-api = "0.2.0"
+fakeyou-api = "0.2.1"
 futures-lite = "1.13.0"

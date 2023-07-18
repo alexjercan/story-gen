@@ -53,6 +53,6 @@ pub fn handle_started(
 
     ev_input_system.send(InputSystemEvent(story.system.clone()));
     ev_input_options.send(InputOptionsEvent(TTSOptions {
-        names: story.names.clone(),
+        voices: story.voices.clone(),
     }));
 }

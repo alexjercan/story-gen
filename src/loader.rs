@@ -10,7 +10,7 @@ use std::collections::HashMap;
 pub struct StoryAsset {
     pub name: String,
     pub system: String,
-    pub names: HashMap<String, String>,
+    pub voices: HashMap<String, String>,
 }
 
 pub struct StoryAssetLoader;
