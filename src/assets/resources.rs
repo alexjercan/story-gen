@@ -1,10 +1,11 @@
-use bevy::prelude::*;
-use bevy_asset_loader::prelude::*;
 use super::loader::*;
+use bevy::{prelude::*, utils::HashMap};
+use bevy_asset_loader::prelude::*;
 
 #[derive(AssetCollection, Resource)]
 pub struct StoryAssets {
     #[asset(path = "story", collection(typed))]
     pub stories: Vec<Handle<StoryAsset>>,
+    #[asset(path = "icons", collection(typed, mapped))]
+    pub icons: HashMap<String, Handle<Image>>
 }
-

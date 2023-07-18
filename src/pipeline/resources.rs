@@ -5,9 +5,14 @@ use std::collections::VecDeque;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Action {
     #[serde(rename = "say")]
-    Say { name: String, text: String },
+    Say {
+        name: String,
+        text: String,
+    },
     #[serde(rename = "comment")]
-    Comment { text: String },
+    Comment {
+        text: String,
+    },
     EndOfStory,
 }
 

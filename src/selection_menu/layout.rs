@@ -15,14 +15,14 @@ pub fn build_selection_menu(commands: &mut Commands, stories: Vec<&StoryAsset>) 
                 },
                 ..default()
             },
-            SelectionMenu {},
+            SelectionMenu,
         ))
         .with_children(|builder| {
             builder
                 .spawn(NodeBundle {
                     style: Style {
                         width: Val::Percent(100.0),
-                        flex_basis: Val::Percent(15.0),
+                        height: Val::Percent(15.0),
                         justify_content: JustifyContent::Center,
                         align_items: AlignItems::Center,
                         ..default()
@@ -37,7 +37,7 @@ pub fn build_selection_menu(commands: &mut Commands, stories: Vec<&StoryAsset>) 
                 .spawn(NodeBundle {
                     style: Style {
                         width: Val::Percent(100.0),
-                        flex_grow: 1.0,
+                        height: Val::Percent(75.0),
                         flex_direction: FlexDirection::Row,
                         justify_content: JustifyContent::Center,
                         align_items: AlignItems::Center,
@@ -55,7 +55,7 @@ pub fn build_selection_menu(commands: &mut Commands, stories: Vec<&StoryAsset>) 
                 .spawn(NodeBundle {
                     style: Style {
                         width: Val::Percent(100.0),
-                        flex_basis: Val::Percent(10.0),
+                        height: Val::Percent(10.0),
                         flex_direction: FlexDirection::Row,
                         justify_content: JustifyContent::SpaceBetween,
                         align_items: AlignItems::Center,
@@ -97,7 +97,7 @@ fn build_content(builder: &mut ChildBuilder, stories: Vec<&StoryAsset>) {
                 justify_content: JustifyContent::FlexStart,
                 align_items: AlignItems::Center,
                 height: Val::Percent(100.0),
-                flex_basis: Val::Percent(30.0),
+                width: Val::Percent(30.0),
                 row_gap: Val::Px(5.0),
                 padding: UiRect::all(Val::Px(5.0)),
                 ..default()
@@ -111,19 +111,23 @@ fn build_content(builder: &mut ChildBuilder, stories: Vec<&StoryAsset>) {
             });
         });
     builder
-        .spawn(NodeBundle {
-            style: Style {
-                height: Val::Percent(100.0),
-                flex_grow: 1.0,
-                justify_content: JustifyContent::FlexStart,
-                align_items: AlignItems::FlexStart,
-                flex_direction: FlexDirection::Column,
-                padding: UiRect::all(Val::Px(5.0)),
+        .spawn((
+            NodeBundle {
+                style: Style {
+                    height: Val::Percent(100.0),
+                    width: Val::Percent(70.0),
+                    justify_content: JustifyContent::FlexStart,
+                    align_items: AlignItems::FlexStart,
+                    flex_direction: FlexDirection::Column,
+                    padding: UiRect::all(Val::Px(5.0)),
+                    ..default()
+                },
+                visibility: Visibility::Hidden,
+                background_color: BackgroundColor::from(styles::color::BACKGROUND),
                 ..default()
             },
-            background_color: BackgroundColor::from(styles::color::BACKGROUND),
-            ..default()
-        })
+            DescriptionElement,
+        ))
         .with_children(|builder| {
             build_description_element(builder);
         });
@@ -183,6 +187,29 @@ fn build_description_element(builder: &mut ChildBuilder) {
             ..default()
         })
         .with_children(|builder| {
+            builder.spawn((
+                ImageBundle {
+                    style: Style {
+                        max_height: Val::Px(200.0),
+                        aspect_ratio: Some(1.0),
+                        ..default()
+                    },
+                    ..default()
+                },
+                IconImage,
+            ));
+        });
+    builder
+        .spawn(NodeBundle {
+            style: Style {
+                width: Val::Percent(100.0),
+                justify_content: JustifyContent::FlexStart,
+                align_items: AlignItems::FlexStart,
+                ..default()
+            },
+            ..default()
+        })
+        .with_children(|builder| {
             builder.spawn((TextBundle {
                 text: Text {
                     sections: vec![TextSection::new(
@@ -226,7 +253,7 @@ fn build_description_element(builder: &mut ChildBuilder) {
                     },
                     ..default()
                 },
-                SystemText {},
+                SystemText,
             ));
         });
 
@@ -284,7 +311,7 @@ fn build_description_element(builder: &mut ChildBuilder) {
                     },
                     ..default()
                 },
-                VoicesText {},
+                VoicesText,
             ));
         });
 }
@@ -308,7 +335,7 @@ fn build_control(builder: &mut ChildBuilder) {
                 hover_color: styles::color::HOVER,
                 normal_color: styles::color::SECONDARY,
             },
-            BackButton {},
+            BackButton,
         ))
         .with_children(|builder| {
             builder.spawn(TextBundle {
@@ -346,7 +373,7 @@ fn build_control(builder: &mut ChildBuilder) {
                 hover_color: styles::color::HOVER,
                 normal_color: styles::color::PRIMARY,
             },
-            NextButton {},
+            NextButton,
         ))
         .with_children(|builder| {
             builder.spawn(TextBundle {

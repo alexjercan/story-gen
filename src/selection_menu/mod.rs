@@ -19,6 +19,8 @@ impl Plugin for SelectionMenuPlugin {
                 Update,
                 (
                     interact_with_selection_button,
+                    update_description_visibility,
+                    update_icon_image,
                     update_system_text,
                     update_voices_text,
                     interact_with_back_button,

@@ -9,6 +9,8 @@ use std::collections::HashMap;
 #[uuid = "499f98fd-3296-4978-b0ae-0d851b781071"]
 pub struct StoryAsset {
     pub id: String,
+    #[serde(default)]
+    pub icon: Option<String>,
     pub name: String,
     pub system: String,
     pub voices: HashMap<String, String>,

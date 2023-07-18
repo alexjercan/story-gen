@@ -15,7 +15,6 @@ pub fn build_input_menu(commands: &mut Commands) {
                     align_items: AlignItems::Center,
                     ..default()
                 },
-                background_color: BackgroundColor::from(styles::color::BACKGROUND),
                 visibility: Visibility::Visible,
                 ..default()
             },
