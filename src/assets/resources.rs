@@ -2,7 +2,7 @@ use super::loader::*;
 use bevy::{prelude::*, utils::HashMap};
 use bevy_asset_loader::prelude::*;
 
-#[derive(AssetCollection, Resource)]
+#[derive(AssetCollection, Resource, Debug)]
 pub struct StoryAssets {
     #[asset(path = "story", collection(typed))]
     pub stories: Vec<Handle<StoryAsset>>,

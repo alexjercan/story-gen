@@ -1,5 +1,6 @@
 use crate::input::CreatedTextEvent;
 use crate::pipeline::InputPromptEvent;
+use crate::SYSTEM_TEXT;
 use crate::{components::MainCamera, selection_menu::SelectedStory};
 use bevy::{prelude::*, window::PrimaryWindow};
 use chatgpt::InputSystemEvent;
@@ -33,7 +34,8 @@ pub fn handle_started(
 ) {
     let story = story.0.as_ref().expect("unreachable - no story selected");
 
-    ev_input_system.send(InputSystemEvent(story.system.clone()));
+    let system = SYSTEM_TEXT.to_string() + (&story.system);
+    ev_input_system.send(InputSystemEvent(system.clone()));
     ev_input_options.send(InputOptionsEvent(TTSOptions {
         voices: story.voices.clone(),
     }));
