@@ -1,8 +1,8 @@
-use crate::components::MainCamera;
 use crate::input::CreatedTextEvent;
 use crate::loader::StoryAsset;
 use crate::pipeline::InputPromptEvent;
 use crate::resources::Stories;
+use crate::{components::MainCamera, selection_menu::SelectedStory};
 use bevy::{prelude::*, window::PrimaryWindow};
 use chatgpt::InputSystemEvent;
 use fakeyou::{InputOptionsEvent, TTSOptions};
@@ -43,13 +43,9 @@ pub fn handle_created_text(
 pub fn handle_started(
     mut ev_input_system: EventWriter<InputSystemEvent>,
     mut ev_input_options: EventWriter<InputOptionsEvent>,
-    story_assets: Res<Assets<StoryAsset>>,
-    asset_server: Res<AssetServer>,
+    story: Res<SelectedStory>,
 ) {
-    // TODO: this is hardcoded for now. Make a menu where you can select from
-    // the available stories.
-    let asset_handle: Handle<StoryAsset> = asset_server.load("story/rick_and_morty.story.ron");
-    let story = story_assets.get(&asset_handle).unwrap();
+    let story = story.0.as_ref().expect("unreachable - no story selected");
 
     ev_input_system.send(InputSystemEvent(story.system.clone()));
     ev_input_options.send(InputOptionsEvent(TTSOptions {

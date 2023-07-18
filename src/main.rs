@@ -1,3 +1,4 @@
+mod selection_menu;
 mod components;
 mod debug;
 mod input;
@@ -25,6 +26,7 @@ fn main() {
             ClickableButtonPlugin,
             main_menu::MainMenuPlugin,
             options::OptionsMenuPlugin,
+            selection_menu::SelectionMenuPlugin,
             input::StoryInputPlugin,
             pipeline::PipelinePlugin,
         ))
@@ -42,5 +44,6 @@ pub enum AppState {
     #[default]
     MainMenu,
     OptionsMenu,
+    SelectionMenu,
     Story,
 }

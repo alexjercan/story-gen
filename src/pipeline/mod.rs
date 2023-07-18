@@ -19,6 +19,7 @@ pub enum ActionStory {
     Comment {
         text: String,
     },
+    EndOfStory,
 }
 
 pub struct PipelinePlugin;

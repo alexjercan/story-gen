@@ -8,6 +8,7 @@ pub enum Action {
     Say { name: String, text: String },
     #[serde(rename = "comment")]
     Comment { text: String },
+    EndOfStory,
 }
 
 #[derive(Resource, Default)]

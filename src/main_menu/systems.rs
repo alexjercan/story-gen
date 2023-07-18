@@ -21,7 +21,7 @@ pub fn interact_with_play_button(
     mut app_state_next_state: ResMut<NextState<AppState>>,
 ) {
     if let Ok(Interaction::Pressed) = button_query.get_single_mut() {
-        app_state_next_state.set(AppState::Story)
+        app_state_next_state.set(AppState::SelectionMenu)
     }
 }
 

@@ -5,9 +5,10 @@ use bevy::{
 use serde::Deserialize;
 use std::collections::HashMap;
 
-#[derive(Debug, Deserialize, TypeUuid, TypePath)]
+#[derive(Debug, Deserialize, TypeUuid, TypePath, Clone)]
 #[uuid = "499f98fd-3296-4978-b0ae-0d851b781071"]
 pub struct StoryAsset {
+    pub id: String,
     pub name: String,
     pub system: String,
     pub voices: HashMap<String, String>,

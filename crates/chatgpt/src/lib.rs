@@ -91,6 +91,8 @@ impl Default for StoryChatBody {
 #[derive(Resource, Default, Debug, Deref, DerefMut, Clone)]
 struct StoryChatAuth(Option<Auth>);
 
+// TODO: Should check if the user authenticated before we can use the plugin
+
 #[derive(Default)]
 pub struct ChatGPTPlugin {
     auth: Option<Auth>,

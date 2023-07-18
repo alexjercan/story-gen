@@ -4251,6 +4251,7 @@ dependencies = [
  "egui-gizmo",
  "egui_dock",
  "fakeyou",
+ "log 0.4.19",
  "ron",
  "serde",
  "serde_json",
