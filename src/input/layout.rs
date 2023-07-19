@@ -8,13 +8,14 @@ pub fn build_input_menu(commands: &mut Commands) {
         .spawn((
             NodeBundle {
                 style: Style {
-                    width: Val::Vw(100.0),
-                    height: Val::Vh(100.0),
+                    flex_grow: 1.0,
+                    flex_shrink: 1.0,
                     flex_direction: FlexDirection::Column,
                     justify_content: JustifyContent::Center,
                     align_items: AlignItems::Center,
                     ..default()
                 },
+                background_color: Color::BLUE.into(),
                 visibility: Visibility::Visible,
                 ..default()
             },

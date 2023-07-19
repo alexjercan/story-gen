@@ -6,6 +6,7 @@ mod main_menu;
 mod options;
 mod pipeline;
 mod selection_menu;
+mod story;
 mod styles;
 mod systems;
 
@@ -47,12 +48,18 @@ fn main() {
             selection_menu::SelectionMenuPlugin,
             input::StoryInputPlugin,
             pipeline::PipelinePlugin,
+            story::StoryPlugin,
         ))
         // .add_plugins(debug::DebugPlugin)
         .add_systems(OnEnter(AppState::Story), handle_started)
         .add_systems(
             Update,
-            handle_created_text.run_if(in_state(AppState::Story)),
+            (
+                handle_created_text,
+                handle_created_action,
+                handle_end_of_story,
+            )
+                .run_if(in_state(AppState::Story)),
         )
         .run();
 }

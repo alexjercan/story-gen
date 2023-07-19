@@ -1,3 +1,4 @@
+use log::warn;
 use super::events::*;
 use super::resources::*;
 use super::ActionStory;
@@ -74,7 +75,7 @@ pub fn handle_created_tts(
         let tts = match &ev.0 {
             Ok(tts) => Some(tts.clone()),
             Err(err) => {
-                println!("TTS error: {}", err);
+                warn!("TTS error: {}", err);
                 None
             }
         };
