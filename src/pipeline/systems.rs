@@ -1,4 +1,3 @@
-use log::warn;
 use super::events::*;
 use super::resources::*;
 use super::ActionStory;
@@ -7,7 +6,7 @@ use bevy::prelude::*;
 use bevy_mod_sysfail::*;
 use chatgpt::*;
 use fakeyou::*;
-use log::info;
+use log::{info, warn};
 
 pub fn handle_created_text(
     mut ev_input_prompt: EventReader<InputPromptEvent>,
@@ -16,7 +15,9 @@ pub fn handle_created_text(
     ev_input_prompt.iter().for_each(|ev| {
         info!("handle_created_text text={:?}", ev.0);
 
-        ev_input_chat.send(InputChatEvent(ev.0.clone()));
+        let text = format!("[{{\"comment\": {{\"text\": \"{}\"}}}}]", ev.0);
+
+        ev_input_chat.send(InputChatEvent(text));
     });
 }
 
@@ -31,11 +32,7 @@ pub fn handle_created_story(
         .fold(Ok(vec![]), |acc: Result<_>, ev| {
             let story = ev.0.as_ref().map_err(|err| anyhow::anyhow!("{}", err))?;
 
-            info!("handle_created_story story={:?}", story);
-
             let actions = serde_json::from_str::<Vec<Action>>(story)?;
-
-            info!("handle_created_story actions={:?}", actions);
 
             Ok(acc?.into_iter().chain(actions.into_iter()).collect())
         })?;
@@ -49,6 +46,8 @@ pub fn handle_created_story(
         .chain(std::iter::once(&Action::EndOfStory))
         .for_each(|action| {
             actions_queue.actions.push_back(action.clone());
+
+            info!("handle_created_story action={:?}", action);
 
             match action {
                 Action::Say { name, text } => {
