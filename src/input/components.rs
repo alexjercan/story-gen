@@ -1,10 +1,10 @@
 use bevy::prelude::*;
 
 #[derive(Component, Debug)]
-pub struct InputMenu {}
+pub struct InputMenu;
 
 #[derive(Component, Debug)]
-pub struct InputText {}
+pub struct InputText;
 
 #[derive(Component, Debug)]
-pub struct ContinueButton {}
+pub struct ContinueButton;

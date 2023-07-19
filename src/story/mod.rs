@@ -20,11 +20,14 @@ impl Plugin for StoryPlugin {
             .add_event::<InputActionStoryEvent>()
             .add_event::<CreatedEndOfStoryEvent>()
             .add_systems(OnEnter(AppState::Story), spawn_subtitle_hud)
-            .add_systems(OnExit(AppState::Story), despawn_subtitle_hud)
+            .add_systems(
+                OnExit(AppState::Story),
+                (despawn_subtitle_hud, despawn_story_actions),
+            )
             .add_systems(
                 Update,
                 (
-                    handle_created_action,
+                    handle_created_action, handle_quit_to_menu,
                     (spawn_story_actions, subtitle_clean_system)
                         .run_if(in_state(StoryState::Spawn)),
                     (check_story_action, subtitle_system, audio_system)

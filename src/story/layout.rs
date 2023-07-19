@@ -7,14 +7,13 @@ pub fn build_subtitle_hud(commands: &mut Commands) {
         .spawn((
             NodeBundle {
                 style: Style {
-                    flex_grow: 1.0,
-                    flex_shrink: 1.0,
+                    width: Val::Vw(100.0),
+                    height: Val::Vh(100.0),
                     flex_direction: FlexDirection::Column,
                     justify_content: JustifyContent::FlexEnd,
                     align_items: AlignItems::Center,
                     ..default()
                 },
-                background_color: Color::RED.into(),
                 ..default()
             },
             SubtitleHud {},
@@ -36,7 +35,6 @@ pub fn build_subtitle_hud(commands: &mut Commands) {
                         },
                         ..default()
                     },
-                    background_color: Color::GREEN.into(),
                     ..default()
                 },))
                 .with_children(|parent| {

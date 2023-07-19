@@ -10,6 +10,7 @@ pub fn spawn_selection_menu(
     mut commands: Commands,
     assets: Res<StoryAssets>,
     story_assets: Res<Assets<StoryAsset>>,
+    mut selected_story: ResMut<SelectedStory>,
 ) {
     let stories = assets
         .stories
@@ -18,6 +19,8 @@ pub fn spawn_selection_menu(
         .collect::<Vec<_>>();
 
     build_selection_menu(&mut commands, stories);
+
+    selected_story.0 = None;
 }
 
 #[quick_sysfail]
@@ -112,11 +115,9 @@ pub fn update_next_visibility(
 pub fn interact_with_back_button(
     mut button_query: Query<&Interaction, (Changed<Interaction>, With<BackButton>)>,
     mut app_state_next_state: ResMut<NextState<AppState>>,
-    mut selected_story: ResMut<SelectedStory>,
 ) {
     if let Ok(Interaction::Pressed) = button_query.get_single_mut() {
         app_state_next_state.set(AppState::MainMenu);
-        selected_story.0 = None;
     }
 }
 

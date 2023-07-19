@@ -8,36 +8,24 @@ pub fn build_input_menu(commands: &mut Commands) {
         .spawn((
             NodeBundle {
                 style: Style {
-                    flex_grow: 1.0,
-                    flex_shrink: 1.0,
+                    position_type: PositionType::Absolute,
+                    width: Val::Percent(50.0),
+                    height: Val::Percent(50.0),
+                    top: Val::Percent(25.0),
+                    left: Val::Percent(25.0),
                     flex_direction: FlexDirection::Column,
-                    justify_content: JustifyContent::Center,
+                    justify_content: JustifyContent::FlexStart,
                     align_items: AlignItems::Center,
+                    row_gap: Val::Percent(5.0),
                     ..default()
                 },
-                background_color: Color::BLUE.into(),
                 visibility: Visibility::Visible,
                 ..default()
             },
-            InputMenu {},
+            InputMenu,
         ))
         .with_children(|builder| {
-            builder
-                .spawn(NodeBundle {
-                    style: Style {
-                        width: Val::Percent(50.0),
-                        height: Val::Percent(50.0),
-                        flex_direction: FlexDirection::Column,
-                        justify_content: JustifyContent::FlexStart,
-                        align_items: AlignItems::Center,
-                        row_gap: Val::Percent(5.0),
-                        ..default()
-                    },
-                    ..default()
-                })
-                .with_children(|builder| {
-                    build_menu(builder);
-                });
+            build_menu(builder);
         });
 }
 
@@ -88,7 +76,7 @@ fn build_menu(builder: &mut ChildBuilder) {
                             },
                             ..default()
                         },
-                        InputText {},
+                        InputText,
                     ));
                 });
         });
@@ -111,7 +99,7 @@ fn build_menu(builder: &mut ChildBuilder) {
                 hover_color: styles::color::HOVER,
                 normal_color: styles::color::PRIMARY,
             },
-            ContinueButton {},
+            ContinueButton,
         ))
         .with_children(|builder| {
             builder.spawn(TextBundle {

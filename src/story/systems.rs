@@ -3,6 +3,7 @@ use super::events::*;
 use super::layout::*;
 use super::resources::*;
 use super::StoryState;
+use crate::AppState;
 use crate::pipeline::ActionStory;
 use bevy::prelude::*;
 
@@ -13,6 +14,17 @@ pub fn spawn_subtitle_hud(mut commands: Commands) {
 pub fn despawn_subtitle_hud(mut commands: Commands, query: Query<Entity, With<SubtitleHud>>) {
     for entity in query.iter() {
         commands.entity(entity).despawn_recursive();
+    }
+}
+
+pub fn handle_quit_to_menu(
+    kbd: Res<Input<KeyCode>>,
+    mut app_state_next_state: ResMut<NextState<AppState>>,
+    mut story_next_state: ResMut<NextState<StoryState>>,
+) {
+    if kbd.just_pressed(KeyCode::Escape) {
+        story_next_state.set(StoryState::EndOfStory);
+        app_state_next_state.set(AppState::MainMenu);
     }
 }
 
@@ -73,6 +85,15 @@ pub fn spawn_story_actions(
     }
 }
 
+pub fn despawn_story_actions(
+    mut commands: Commands,
+    actions: Query<Entity, With<StoryActionValue>>,
+) {
+    for entity in actions.iter() {
+        commands.entity(entity).despawn();
+    }
+}
+
 pub fn check_story_action(
     mut commands: Commands,
     time: Res<Time>,
@@ -122,7 +143,9 @@ pub fn audio_system(actions: Query<&AudioSink, With<StoryActionAudio>>) {
 pub fn end_of_story(
     mut ev_created_end_of_story: EventWriter<CreatedEndOfStoryEvent>,
     mut story_next_state: ResMut<NextState<StoryState>>,
+    mut story_actions: ResMut<StoryActions>
 ) {
+    story_actions.clear();
     ev_created_end_of_story.send(CreatedEndOfStoryEvent);
     story_next_state.set(StoryState::Spawn);
 }
